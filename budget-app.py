@@ -15,16 +15,16 @@ class Category:
     else:
       return True
 
-  def deposit(self, amount, description=' '):
+  def deposit(self, amount, description=''):
     self.newItem = {}
-    self.newItem['amount'] = amount
+    self.newItem['amount'] = float(amount)
     self.newItem['description'] = description
     self.ledger.append(self.newItem)
 
-  def withdraw(self, amount, description=' '):
+  def withdraw(self, amount, description=''):
     if self.check_funds(amount) == True:
       self.newItem = {}
-      self.newItem['amount'] = -amount
+      self.newItem['amount'] = float(-amount)
       self.newItem['description'] = description
       self.ledger.append(self.newItem)
       return True
@@ -34,20 +34,37 @@ class Category:
   def get_ledger(self):
     return self.ledger
 
-  def transfer(self, differentCategory, amount):
+  def transfer(self, amount, differentCategory):
     if self.withdraw(amount, 'Transfer to ' + differentCategory.name):
-      differentCategory.deposit(amount, 'Transfer from ' + differentCategory.name)
+      differentCategory.deposit(amount, 'Transfer from ' + self.name)
       return True
     else:
       return False
 
-food = Category('food')
-food.deposit(5, 'initial deposit')
-food.withdraw(3, 'cake')
-print(food.get_ledger())
+  def __repr__(self):
+    title = self.name.center(30, '*') + '\n'
+
+    items = ''
+    for item in self.ledger:
+      amount = "{:.2f}".format(item.get('amount'))
+      itemLine = item.get('description')[0:23].ljust(23, ' ') + amount.rjust(7, ' ')
+      items = items + itemLine + '\n'
+
+    total = 'Total: ' + str(self.get_balance())
+    return title + items + total
+
+food = Category("Food")
+food.deposit(1000, "initial deposit")
+food.withdraw(10.15, "groceries")
+food.withdraw(15.89, "restaurant and more food for dessert")
 print(food.get_balance())
-beauty = Category('beauty')
-beauty.deposit(15, 'initial deposit')
-print(beauty.transfer(food, 3))
-print(beauty.get_ledger())
-print(food.get_ledger())
+clothing = Category("Clothing")
+food.transfer(50, clothing)
+clothing.withdraw(25.55)
+clothing.withdraw(100)
+auto = Category("Auto")
+auto.deposit(1000, "initial deposit")
+auto.withdraw(15)
+
+print(food)
+print(clothing)
