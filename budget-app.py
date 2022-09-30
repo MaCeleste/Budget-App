@@ -1,7 +1,11 @@
 class Category:
+  #list that keeps track of all the instances created
+  #registry = []
+
   def __init__(self, name):
     self.name = name
     self.ledger = []
+    #Category.registry.append(self.name) adds instance to the registry
 
   def get_balance(self):
     total = 0
@@ -53,6 +57,30 @@ class Category:
     total = 'Total: ' + str(self.get_balance())
     return title + items + total
 
+expensesByCategory = {}
+def calculateExpenses(categories):
+  for category in categories:
+    category.totalExpenses = 0
+    for item in category.ledger:
+      if item['amount'] < 0:
+        category.totalExpenses += item['amount']
+        category.totalExpenses = round(category.totalExpenses)
+    expensesByCategory[category.name] = category.totalExpenses
+  totalExpenses = sum(expensesByCategory.values())
+  print(expensesByCategory)
+  for k, v in expensesByCategory.items():
+    expensesByCategory[k] = round((v / totalExpenses) * 10)
+  return expensesByCategory
+
+def create_spend_chart(categories):
+  calculateExpenses(categories)
+  print(expensesByCategory)
+
+
+
+  title = 'Percentage spent by category' + '\n'
+  oneHundred = '100| ' + '\n'
+
 food = Category("Food")
 food.deposit(1000, "initial deposit")
 food.withdraw(10.15, "groceries")
@@ -68,3 +96,5 @@ auto.withdraw(15)
 
 print(food)
 print(clothing)
+print(auto)
+print(create_spend_chart([food, clothing, auto]))
