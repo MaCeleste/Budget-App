@@ -69,102 +69,32 @@ def calculateExpenses(categories):
   totalExpenses = sum(expensesByCategory.values())
   print(expensesByCategory)
   for k, v in expensesByCategory.items():
-    expensesByCategory[k] = round((v / totalExpenses) * 10)
+    expensesByCategory[k] = round((v / totalExpenses) * 100)
   return expensesByCategory
 
 def create_spend_chart(categories):
   calculateExpenses(categories)
   print(expensesByCategory)
 
-  title = 'Percentage spent by category' + '\n'
-  oneHundred = '100|'
-  for k, v in expensesByCategory.items():
-    if v >= 10:
-      char = '  o'
-    else:
-      char = '   '
-    oneHundred += char
+  chart = 'Percentage spent by category' + '\n'
+  for i in range(100, -1, -10):
+    line = str(i).rjust(3, ' ') + '| '
+    for k, v in expensesByCategory.items():
+      if v >= i-5:
+        char = 'o  '
+      else:
+        char = '   '
+      line += char
+    chart += line + '\n'
 
-  ninety = ' 90|'
-  for k, v in expensesByCategory.items():
-    if v >= 9:
-      char = '  o'
-    else:
-      char = '   '
-    ninety += char
-
-  eighty = ' 80|'
-  for k, v in expensesByCategory.items():
-    if v >= 8:
-      char = '  o'
-    else:
-      char = '   '
-    eighty += char
-
-  seventy = ' 70|'
-  for k, v in expensesByCategory.items():
-    if v >= 7:
-      char = '  o'
-    else:
-      char = '   '
-    seventy += char
-
-  sixty = ' 60|'
-  for k, v in expensesByCategory.items():
-    if v >= 6:
-      char = '  o'
-    else:
-      char = '   '
-    sixty += char
-
-  fifty = ' 50|'
-  for k, v in expensesByCategory.items():
-    if v >= 5:
-      char = '  o'
-    else:
-      char = '   '
-    fifty += char
-
-  fourty = ' 40|'
-  for k, v in expensesByCategory.items():
-    if v >= 4:
-      char = '  o'
-    else:
-      char = '   '
-    fourty += char
-
-  thirty = ' 30|'
-  for k, v in expensesByCategory.items():
-    if v >= 3:
-      char = '  o'
-    else:
-      char = '   '
-    thirty += char
-
-  twenty = ' 20|'
-  for k, v in expensesByCategory.items():
-    if v >= 2:
-      char = '  o'
-    else:
-      char = '   '
-    twenty += char
-
-  ten = ' 10|'
-  for k, v in expensesByCategory.items():
-    if v >= 1:
-      char = '  o'
-    else:
-      char = '   '
-    ten += char
-
-  chart = title + oneHundred + '\n' + ninety + '\n' + eighty + '\n' + seventy + '\n' + sixty + '\n' + fifty + '\n' + fourty + '\n' + thirty + '\n' + twenty + '\n' + ten + '\n'
-  print(chart)
+  #testLine = '    ----------\n     B  F  E  \n     u  o  n  \n     s  o  t  \n     i  d  e  \n     n     r  \n     e     t  \n     s     a  \n     s     i  \n           n  \n           m  \n           e  \n           n  \n           t  '
+  #chart = chart + testLine
+  return chart
 
 food = Category("Food")
 food.deposit(1000, "initial deposit")
 food.withdraw(10.15, "groceries")
 food.withdraw(15.89, "restaurant and more food for dessert")
-print(food.get_balance())
 clothing = Category("Clothing")
 food.transfer(50, clothing)
 clothing.withdraw(25.55)
