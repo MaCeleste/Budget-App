@@ -74,7 +74,6 @@ def calculateExpenses(categories):
 
 def create_spend_chart(categories):
   calculateExpenses(categories)
-  print(expensesByCategory)
 
   chart = 'Percentage spent by category' + '\n'
   for i in range(100, -1, -10):
@@ -87,8 +86,25 @@ def create_spend_chart(categories):
       line += char
     chart += line + '\n'
 
-  #testLine = '    ----------\n     B  F  E  \n     u  o  n  \n     s  o  t  \n     i  d  e  \n     n     r  \n     e     t  \n     s     a  \n     s     i  \n           n  \n           m  \n           e  \n           n  \n           t  '
-  #chart = chart + testLine
+  separator = '    ' + '---'*len(categories) + '-' + '\n'
+  chart += separator
+
+  categoryNames = []
+  for cat in categories:
+    categoryNames.append(cat.name)
+  longestCat = max(categoryNames, key=len)
+
+  labels = ''
+  for i in range(len(longestCat)):
+    line = '     '
+    for cat in categoryNames:
+      try:
+        line = line + cat[i] + '  '
+      except:
+        line = line + ' ' + '  '
+    labels += line + '\n'
+
+  chart = chart + labels
   return chart
 
 food = Category("Food")
